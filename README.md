@@ -16,7 +16,7 @@ merge, split, rotate or extract pages from PDFs.
 
 ```bash
 git clone <repo-url>
-cd Magus
+cd PDFMagus
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
@@ -30,15 +30,17 @@ python main.py
 
 ## Project layout
 
-```
+```text
 main.py            Entry point
 pdfmagus/           Application package
   app.py            Main window, notebook, tab wiring
   theme.py           Colors, fonts, icons
   tabs/              Edit / Convert / Logs tabs
+    convert_panels/   Per-operation panels (merge, split, rotate, extract, format, preview)
   operations/         PDF logic (merge, split, rotate, extract, format conversion)
   ocr/                Tesseract detection and OCR execution
   reading/            Reading-history persistence (reader_history.json)
+  widgets/            Reusable UI widgets (tooltip, zoom slider)
 ```
 
 ## Building the executable
