@@ -11,7 +11,7 @@ from pdfmagus.theme import COLORS, FONTS
 from pdfmagus.widgets.tooltip import attach_tooltip
 
 OPERATIONS = [
-    ("formats", "word", "Word/Epub/Image to PDF"),
+    ("formats", "word", "Convert to PDF"),
     ("merge", "merge", "Merge PDFs"),
     ("split", "split", "Split PDF"),
     ("rotate", "rotate", "Rotate pages"),
@@ -38,7 +38,7 @@ class ConvertTab(tk.Frame):
         self.left_panel = tk.Frame(main_container, bg=COLORS["white"])
         self.left_panel.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
-        right_panel = tk.Frame(main_container, bg=COLORS["white"], width=180)
+        right_panel = tk.Frame(main_container, bg=COLORS["white"], width=480)
         right_panel.pack(side="right", fill="both", padx=(10, 0))
         right_panel.pack_propagate(False)
 
@@ -82,12 +82,6 @@ class ConvertTab(tk.Frame):
     def show_operation(self, operation):
         for widget in self.left_panel.winfo_children():
             widget.destroy()
-
-        for op_id, btn in self.operation_buttons.items():
-            if op_id == operation:
-                btn.configure(fg_color=COLORS["hover"], border_width=2, border_color=COLORS["primary"])
-            else:
-                btn.configure(fg_color=COLORS["white"], border_width=0)
 
         self.current_operation = operation
         self.panels[operation].build(self.left_panel)

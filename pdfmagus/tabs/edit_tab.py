@@ -91,18 +91,19 @@ class EditTab(tk.Frame):
         self.btn_save.pack(pady=5)
         attach_tooltip(self.btn_save, "Save PDF")
 
-        btn_ocr = ctk.CTkButton(
+        self.btn_ocr = ctk.CTkButton(
             left_panel,
             text="",
-            image=self.icons["ocr"],
+            image=self.icons["ocr_disabled"],
             width=40,
             height=40,
             fg_color=COLORS["white"],
             hover_color=COLORS["hover"],
             command=self.extract_text_ocr,
+            state="disabled",
         )
-        btn_ocr.pack(pady=5)
-        attach_tooltip(btn_ocr, "Extract text (OCR)")
+        self.btn_ocr.pack(pady=5)
+        attach_tooltip(self.btn_ocr, "Extract text (OCR)")
 
         self.btn_export = ctk.CTkButton(
             left_panel,
@@ -383,6 +384,8 @@ class EditTab(tk.Frame):
             else:
                 self.btn_next.configure(state="disabled", image=self.icons["next_page_disabled"])
 
+            self.btn_ocr.configure(state="normal", image=self.icons["ocr"])
+
             if self.current_pdf_path:
                 self.reading_history.register_session(self.current_pdf_path, self.edit_page_num)
         except Exception as e:
@@ -424,6 +427,7 @@ class EditTab(tk.Frame):
         self.lbl_page_info.configure(text="0/0")
         self.btn_prev.configure(state="disabled", image=self.icons["prev_page_disabled"])
         self.btn_next.configure(state="disabled", image=self.icons["next_page_disabled"])
+        self.btn_ocr.configure(state="disabled", image=self.icons["ocr_disabled"])
 
     def _draw_annotation(self, x1, y1, x2, y2, color, mode):
         if mode == "highlight":

@@ -3,7 +3,7 @@ import io
 import fitz
 from PIL import Image, ImageTk
 
-THUMBNAIL_WIDTH = 130
+THUMBNAIL_WIDTH = 440
 THUMBNAIL_MATRIX_SCALE = 0.15
 
 
@@ -28,7 +28,7 @@ def render_pdf_thumbnails(canvas, entries, extra_text=None):
             img = _render_thumbnail(file_path, page_index)
 
             if label:
-                canvas.create_text(70, y - 10, text=label, font=("Arial", 8), fill="gray")
+                canvas.create_text(230, y - 10, text=label, font=("Arial", 8), fill="gray")
 
             photo = ImageTk.PhotoImage(img)
             canvas.create_image(10, y, anchor="nw", image=photo)
@@ -39,7 +39,7 @@ def render_pdf_thumbnails(canvas, entries, extra_text=None):
             pass
 
     if extra_text:
-        canvas.create_text(70, y, text=extra_text, font=("Arial", 7), fill="gray")
+        canvas.create_text(230, y, text=extra_text, font=("Arial", 7), fill="gray")
 
     canvas.configure(scrollregion=canvas.bbox("all"))
 
@@ -52,7 +52,7 @@ def render_original_page_preview(canvas, file_path):
         img = _render_thumbnail(file_path, 0)
         photo = ImageTk.PhotoImage(img)
 
-        canvas.create_text(70, 5, text="Original", font=("Arial", 9, "bold"), fill="gray")
+        canvas.create_text(230, 5, text="Original", font=("Arial", 9, "bold"), fill="gray")
         canvas.create_image(10, 25, anchor="nw", image=photo)
         canvas.image_list = [photo]
 

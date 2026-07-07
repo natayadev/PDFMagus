@@ -32,5 +32,23 @@ def split_pdf(path, mode, pages_input, output_folder):
             out = os.path.join(output_folder, f"{basename}_odd_{i + 1:03d}.pdf")
             new_doc.save(out)
             new_doc.close()
+    elif mode == "size":
+        max_bytes = float(pages_input) * 1024 * 1024
+        chunk_index = 1
+        new_doc = fitz.open()
+        for page_num in range(total_pages):
+            new_doc.insert_pdf(doc, from_page=page_num, to_page=page_num)
+            if new_doc.page_count > 1 and len(new_doc.write()) > max_bytes:
+                new_doc.delete_page(new_doc.page_count - 1)
+                out = os.path.join(output_folder, f"{basename}_part_{chunk_index:03d}.pdf")
+                new_doc.save(out)
+                new_doc.close()
+                chunk_index += 1
+                new_doc = fitz.open()
+                new_doc.insert_pdf(doc, from_page=page_num, to_page=page_num)
+        if new_doc.page_count > 0:
+            out = os.path.join(output_folder, f"{basename}_part_{chunk_index:03d}.pdf")
+            new_doc.save(out)
+        new_doc.close()
 
     doc.close()

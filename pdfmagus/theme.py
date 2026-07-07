@@ -4,7 +4,7 @@ from tkfontawesome import icon_to_image
 COLORS = {
     "primary": "#E34A6F",
     "primary_hover": "#C93A5F",
-    "hover": "#f0f9f4",
+    "hover": "#fdeef1",
     "white": "white",
     "black": "black",
     "gray_light": "#f0f0f0",
@@ -66,4 +66,5 @@ def load_icons():
         "epub": icon_to_image("book", fill=COLORS["primary"], scale_to_width=20),
         "image": icon_to_image("file-image", fill=COLORS["primary"], scale_to_width=20),
         "ocr": icon_to_image("font", fill=COLORS["primary"], scale_to_width=22),
+        "ocr_disabled": icon_to_image("font", fill=COLORS["disabled"], scale_to_width=22),
     }
