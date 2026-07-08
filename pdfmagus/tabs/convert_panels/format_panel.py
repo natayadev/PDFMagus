@@ -9,11 +9,11 @@ from ebooklib import epub
 
 from pdfmagus.operations import format_converter
 from pdfmagus.theme import COLORS, FONTS
+from pdfmagus.widgets.buttons import primary_button, run_button
 
 
 class FormatConversionPanel:
-    def __init__(self, icons, preview_canvas, log_event):
-        self.icons = icons
+    def __init__(self, preview_canvas, log_event):
         self.preview_canvas = preview_canvas
         self.log_event = log_event
 
@@ -21,22 +21,14 @@ class FormatConversionPanel:
         self.convert_file_type = None
 
     def build(self, parent):
-        tk.Label(
-            parent, text="Convert files to PDF", bg=COLORS["white"], fg=COLORS["primary"], font=("Arial", 12, "bold")
-        ).pack(pady=(0, 15))
+        ctk.CTkLabel(
+            parent, text="Convert files to PDF", text_color=COLORS["primary"], font=("Arial", 12, "bold")
+        ).pack(pady=(5, 15))
 
         file_frame = tk.Frame(parent, bg=COLORS["white"])
         file_frame.pack(fill="x", pady=10)
 
-        ctk.CTkButton(
-            file_frame,
-            text="Select File",
-            width=150,
-            height=40,
-            fg_color=COLORS["primary"],
-            hover_color=COLORS["primary_hover"],
-            command=self.select_file_to_convert,
-        ).pack(pady=5)
+        primary_button(file_frame, "Select File", self.select_file_to_convert, width=150).pack(pady=5)
 
         self.lbl_file = ctk.CTkLabel(
             parent, text="No file selected", font=FONTS["label"], text_color=COLORS["black"]
@@ -45,21 +37,9 @@ class FormatConversionPanel:
 
         tk.Frame(parent, bg="#eeeeee", height=2).pack(fill="x", pady=20)
 
-        self.btn_convert = ctk.CTkButton(
-            parent,
-            text="Convert to PDF",
-            width=200,
-            height=45,
-            fg_color=COLORS["white"],
-            border_width=2,
-            border_color=COLORS["primary"],
-            text_color=COLORS["primary"],
-            hover_color=COLORS["danger_hover_light"],
-            image=self.icons["save_pdf_disabled"],
-            state="disabled",
-            command=self.convert_file_to_pdf,
-        )
+        self.btn_convert = run_button(parent, "Convert to PDF", self.convert_file_to_pdf)
         self.btn_convert.pack(pady=10)
+        self.btn_convert.configure(state="disabled")
 
         self.lbl_info = ctk.CTkLabel(
             parent,
@@ -72,7 +52,7 @@ class FormatConversionPanel:
         if self.convert_file_path:
             file_name = os.path.basename(self.convert_file_path)
             self.lbl_file.configure(text=file_name)
-            self.btn_convert.configure(state="normal", image=self.icons["save_pdf"])
+            self.btn_convert.configure(state="normal")
             self.show_convert_preview()
 
     def select_file_to_convert(self):
@@ -106,7 +86,7 @@ class FormatConversionPanel:
                 return
 
             self.lbl_file.configure(text=file_name)
-            self.btn_convert.configure(state="normal", image=self.icons["save_pdf"])
+            self.btn_convert.configure(state="normal")
             self.log_event(f"File loaded for conversion: {file_name}")
 
             self.show_convert_preview()

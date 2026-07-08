@@ -12,6 +12,7 @@ from tkfontawesome import icon_to_image
 
 from pdfmagus.ocr import service as ocr_service
 from pdfmagus.theme import COLORS
+from pdfmagus.widgets.buttons import icon_button, ToggleableIconButton
 from pdfmagus.widgets.tooltip import attach_tooltip
 from pdfmagus.widgets.zoom_slider import ZoomSlider
 
@@ -62,78 +63,27 @@ class EditTab(tk.Frame):
         left_panel = tk.Frame(parent, bg=COLORS["white"])
         left_panel.pack(side="left", fill="y", padx=10, pady=10)
 
-        btn_open = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["open_pdf"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.open_pdf_edit,
-        )
-        btn_open.pack(pady=5)
-        attach_tooltip(btn_open, "Open PDF")
+        icon_button(left_panel, self.icons["open_pdf"], command=self.open_pdf_edit, tooltip="Open PDF").pack(pady=5)
 
-        self.btn_save = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["save_pdf_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.save_highlighted_edit,
-            state="disabled",
+        self.btn_save = ToggleableIconButton(
+            left_panel, self.icons, "save_pdf", command=self.save_highlighted_edit, tooltip="Save PDF"
         )
         self.btn_save.pack(pady=5)
-        attach_tooltip(self.btn_save, "Save PDF")
 
-        self.btn_ocr = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["ocr_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            command=self.extract_text_ocr,
-            state="disabled",
+        self.btn_ocr = ToggleableIconButton(
+            left_panel, self.icons, "ocr", command=self.extract_text_ocr, tooltip="Extract text (OCR)"
         )
         self.btn_ocr.pack(pady=5)
-        attach_tooltip(self.btn_ocr, "Extract text (OCR)")
 
-        self.btn_export = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["export_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.export_highlights_edit,
-            state="disabled",
+        self.btn_export = ToggleableIconButton(
+            left_panel, self.icons, "export", command=self.export_highlights_edit, tooltip="Export"
         )
         self.btn_export.pack(pady=5)
-        attach_tooltip(self.btn_export, "Export")
 
-        self.btn_undo = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["undo_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.undo_edit,
-            state="disabled",
+        self.btn_undo = ToggleableIconButton(
+            left_panel, self.icons, "undo", command=self.undo_edit, tooltip="Undo"
         )
         self.btn_undo.pack(pady=5)
-        attach_tooltip(self.btn_undo, "Undo")
 
         self.annot_mode_icons = {
             "highlight": self.icons["highlight_mode"],
@@ -142,19 +92,13 @@ class EditTab(tk.Frame):
             "squiggly": self.icons["underline_mode"],
         }
 
-        self.btn_annot_mode = ctk.CTkButton(
+        self.btn_annot_mode = icon_button(
             left_panel,
-            text="",
-            image=self.annot_mode_icons["highlight"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
+            self.annot_mode_icons["highlight"],
             command=self.show_annot_mode_menu,
+            tooltip="Annotation mode",
         )
         self.btn_annot_mode.pack(pady=5)
-        attach_tooltip(self.btn_annot_mode, "Annotation mode")
 
         self.annot_mode_menu = tk.Menu(
             self,
@@ -194,20 +138,10 @@ class EditTab(tk.Frame):
 
         tk.Frame(left_panel, bg=COLORS["white"]).pack(fill="x", pady=10)
 
-        self.btn_clear = ctk.CTkButton(
-            left_panel,
-            text="",
-            image=self.icons["clear_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.clear_highlights_edit,
-            state="disabled",
+        self.btn_clear = ToggleableIconButton(
+            left_panel, self.icons, "clear", command=self.clear_highlights_edit, tooltip="Clear"
         )
         self.btn_clear.pack(pady=5)
-        attach_tooltip(self.btn_clear, "Clear")
 
     def _build_canvas_panel(self, parent):
         canvas_panel = tk.Frame(parent, bg=COLORS["white"])
@@ -243,20 +177,10 @@ class EditTab(tk.Frame):
         bottom_section = tk.Frame(self, bg=COLORS["white"])
         bottom_section.pack(fill="x", padx=10, pady=5)
 
-        self.btn_prev = ctk.CTkButton(
-            bottom_section,
-            text="",
-            image=self.icons["prev_page_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.prev_edit_page,
-            state="disabled",
+        self.btn_prev = ToggleableIconButton(
+            bottom_section, self.icons, "prev_page", command=self.prev_edit_page, tooltip="Previous page"
         )
         self.btn_prev.pack(side="left", padx=5)
-        attach_tooltip(self.btn_prev, "Previous page")
 
         self.lbl_page_info = ctk.CTkLabel(
             bottom_section,
@@ -266,20 +190,10 @@ class EditTab(tk.Frame):
         )
         self.lbl_page_info.pack(side="left", padx=20)
 
-        self.btn_next = ctk.CTkButton(
-            bottom_section,
-            text="",
-            image=self.icons["next_page_disabled"],
-            width=40,
-            height=40,
-            fg_color=COLORS["white"],
-            hover_color=COLORS["hover"],
-            font=ctk.CTkFont(family="Arial", size=12),
-            command=self.next_edit_page,
-            state="disabled",
+        self.btn_next = ToggleableIconButton(
+            bottom_section, self.icons, "next_page", command=self.next_edit_page, tooltip="Next page"
         )
         self.btn_next.pack(side="left", padx=5)
-        attach_tooltip(self.btn_next, "Next page")
 
         center_frame = tk.Frame(bottom_section, bg=COLORS["white"])
         center_frame.pack(side="left", fill="x", expand=True)
@@ -374,17 +288,9 @@ class EditTab(tk.Frame):
             total_pages = len(self.edit_doc)
             self.lbl_page_info.configure(text=f"Page: {self.edit_page_num + 1} / {total_pages}")
 
-            if self.edit_page_num > 0:
-                self.btn_prev.configure(state="normal", image=self.icons["prev_page"])
-            else:
-                self.btn_prev.configure(state="disabled", image=self.icons["prev_page_disabled"])
-
-            if self.edit_page_num < total_pages - 1:
-                self.btn_next.configure(state="normal", image=self.icons["next_page"])
-            else:
-                self.btn_next.configure(state="disabled", image=self.icons["next_page_disabled"])
-
-            self.btn_ocr.configure(state="normal", image=self.icons["ocr"])
+            self.btn_prev.set_enabled(self.edit_page_num > 0)
+            self.btn_next.set_enabled(self.edit_page_num < total_pages - 1)
+            self.btn_ocr.set_enabled(True)
 
             if self.current_pdf_path:
                 self.reading_history.register_session(self.current_pdf_path, self.edit_page_num)
@@ -425,9 +331,9 @@ class EditTab(tk.Frame):
         )
 
         self.lbl_page_info.configure(text="0/0")
-        self.btn_prev.configure(state="disabled", image=self.icons["prev_page_disabled"])
-        self.btn_next.configure(state="disabled", image=self.icons["next_page_disabled"])
-        self.btn_ocr.configure(state="disabled", image=self.icons["ocr_disabled"])
+        self.btn_prev.set_enabled(False)
+        self.btn_next.set_enabled(False)
+        self.btn_ocr.set_enabled(False)
 
     def _draw_annotation(self, x1, y1, x2, y2, color, mode):
         if mode == "highlight":
@@ -585,10 +491,10 @@ class EditTab(tk.Frame):
             self.canvas.tag_raise("highlight")
 
             if self.edit_highlights[self.edit_page_num]:
-                self.btn_save.configure(state="normal", image=self.icons["save_pdf"])
-                self.btn_export.configure(state="normal", image=self.icons["export"])
-                self.btn_clear.configure(state="normal", image=self.icons["clear"])
-                self.btn_undo.configure(state="normal", image=self.icons["undo"])
+                self.btn_save.set_enabled(True)
+                self.btn_export.set_enabled(True)
+                self.btn_clear.set_enabled(True)
+                self.btn_undo.set_enabled(True)
         except Exception as e:
             messagebox.showerror("Error", f"Highlight error: {e}")
         finally:
@@ -628,10 +534,10 @@ class EditTab(tk.Frame):
             self.render_edit_page()
 
             if not self.edit_highlights[self.edit_page_num]:
-                self.btn_save.configure(state="disabled", image=self.icons["save_pdf_disabled"])
-                self.btn_export.configure(state="disabled", image=self.icons["export_disabled"])
-                self.btn_clear.configure(state="disabled", image=self.icons["clear_disabled"])
-                self.btn_undo.configure(state="disabled", image=self.icons["undo_disabled"])
+                self.btn_save.set_enabled(False)
+                self.btn_export.set_enabled(False)
+                self.btn_clear.set_enabled(False)
+                self.btn_undo.set_enabled(False)
 
     def clear_highlights_edit(self):
         if not self.edit_doc:
@@ -641,10 +547,10 @@ class EditTab(tk.Frame):
                 self.edit_highlights[self.edit_page_num] = []
             self.render_edit_page()
 
-            self.btn_save.configure(state="disabled", image=self.icons["save_pdf_disabled"])
-            self.btn_export.configure(state="disabled", image=self.icons["export_disabled"])
-            self.btn_clear.configure(state="disabled", image=self.icons["clear_disabled"])
-            self.btn_undo.configure(state="disabled", image=self.icons["undo_disabled"])
+            self.btn_save.set_enabled(False)
+            self.btn_export.set_enabled(False)
+            self.btn_clear.set_enabled(False)
+            self.btn_undo.set_enabled(False)
 
     def save_highlighted_edit(self):
         if not self.edit_doc or not self.edit_highlights or all(len(h) == 0 for h in self.edit_highlights):

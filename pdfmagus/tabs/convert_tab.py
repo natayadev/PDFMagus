@@ -8,7 +8,7 @@ from pdfmagus.tabs.convert_panels.merge_panel import MergePanel
 from pdfmagus.tabs.convert_panels.rotate_panel import RotatePanel
 from pdfmagus.tabs.convert_panels.split_panel import SplitPanel
 from pdfmagus.theme import COLORS, FONTS
-from pdfmagus.widgets.tooltip import attach_tooltip
+from pdfmagus.widgets.buttons import icon_button
 
 OPERATIONS = [
     ("formats", "word", "Convert to PDF"),
@@ -48,7 +48,7 @@ class ConvertTab(tk.Frame):
         self.preview_canvas.pack(fill="both", expand=True)
 
         self.panels = {
-            "formats": FormatConversionPanel(self.icons, self.preview_canvas, self.log_event),
+            "formats": FormatConversionPanel(self.preview_canvas, self.log_event),
             "merge": MergePanel(self.preview_canvas, self.log_event),
             "split": SplitPanel(self.preview_canvas, self.log_event),
             "rotate": RotatePanel(self.preview_canvas, self.log_event),
@@ -64,20 +64,14 @@ class ConvertTab(tk.Frame):
 
         self.operation_buttons = {}
         for op_id, icon_name, tooltip in OPERATIONS:
-            btn = ctk.CTkButton(
+            btn = icon_button(
                 sidebar,
-                text="",
-                image=self.icons[icon_name],
-                width=40,
-                height=40,
-                fg_color=COLORS["white"],
-                hover_color=COLORS["hover"],
-                font=ctk.CTkFont(family="Arial", size=12),
+                self.icons[icon_name],
                 command=lambda o=op_id: self.show_operation(o),
+                tooltip=tooltip,
             )
             btn.pack(pady=5)
             self.operation_buttons[op_id] = btn
-            attach_tooltip(btn, tooltip)
 
     def show_operation(self, operation):
         for widget in self.left_panel.winfo_children():
